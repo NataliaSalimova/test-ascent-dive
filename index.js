@@ -1,23 +1,53 @@
 document.addEventListener('DOMContentLoaded', ()=> {
-    const body = document.querySelector('body');
-    const elements = body.querySelectorAll('*');
-    let targetsList = '';
+    const elements = document.body.querySelectorAll('*');
+    const link= document.querySelector('a');
+    const searchForm = document.getElementById('search');
+    let breadcrumbsList = '';
 
-    elements.forEach((element)=> {
-        element.addEventListener('click', (event) => {
-            event.preventDefault();
+    function initEvents() {
+        // Получение хлебных крошек (Задание 1)
 
-            getTargetList(element);
+        elements.forEach((element)=> {
+            element.addEventListener('click', (event) => {
+                onElementClick(event, element);
+            }, true);
+        });
 
-        }, true);
-    })
+        // Открытие формы (Задание 2)
 
-    const getTargetList = (element)=> {
-        const tagName = `${element.tagName}`;
-        const tagClass = `${element.getAttribute('class')}` !== String(null) ? `.${element.getAttribute('class')}` : '';
-
-        targetsList += `${tagName}${tagClass}` + (element === event.target ? '' : ' > ');
-
-        return targetsList.toLowerCase();
+        link.addEventListener('click', (event)=> {
+            onLinkClick(event);
+        });
     }
+
+    function onLinkClick(event) {
+        searchForm.removeAttribute('hidden');
+    }
+
+    function onElementClick(event, element) {
+        event.preventDefault();
+
+        formBreadcrumbsList(element, event);
+
+        if (element === event.target) {
+            getBreadcrumbsList();
+
+            breadcrumbsList = '';
+        }
+    }
+
+    function getBreadcrumbsList() {
+        console.log(breadcrumbsList.toLowerCase())
+        return breadcrumbsList.toLowerCase();
+    }
+
+    function formBreadcrumbsList(element, event){
+        const tagName = `${element.tagName}`;
+        const tagClass = element.getAttribute('class') ?? '';
+        const dot = tagClass ? '.' : '';
+
+        breadcrumbsList += `${tagName}${dot}${tagClass}`  + (element === event.target ? '' : ' > ');
+    }
+
+    initEvents();
 })
